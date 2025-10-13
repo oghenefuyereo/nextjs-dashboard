@@ -11,10 +11,10 @@ interface PageProps {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  // Unwrap the Promise
+  //  unwrap the searchParams promise
   const { query = '', page = '1' } = await searchParams;
-  const currentPage = parseInt(page, 10);
-  const totalPages = 5; // Replace with dynamic value if available
+  const currentPage = Number(page);
+  const totalPages = 5; 
 
   return (
     <div className="w-full">
@@ -27,16 +27,12 @@ export default async function Page({ searchParams }: PageProps) {
         <CreateInvoice />
       </div>
 
-      {/* Suspense for async Table */}
-      <Suspense
-        key={`${query}-${currentPage}`}
-        fallback={<InvoicesTableSkeleton />}
-      >
+      <Suspense key={`${query}-${currentPage}`} fallback={<InvoicesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
 
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} currentPage={currentPage} />
+        <Pagination totalPages={totalPages} currentPage={currentPage} query={query} />
       </div>
     </div>
   );

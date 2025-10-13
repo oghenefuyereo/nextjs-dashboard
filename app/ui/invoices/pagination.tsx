@@ -8,12 +8,18 @@ import { generatePagination } from '@/app/lib/utils';
 interface PaginationProps {
   totalPages: number;
   currentPage: number;
+  query?: string; // preserve search query
 }
 
-export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+export default function Pagination({ totalPages, currentPage, query }: PaginationProps) {
   const allPages = generatePagination(currentPage, totalPages);
 
-  const createPageURL = (page: number | string) => `/dashboard/invoices?page=${page}`;
+  const createPageURL = (page: number | string) => {
+    const params = new URLSearchParams();
+    params.set('page', page.toString());
+    if (query) params.set('query', query);
+    return `/dashboard/invoices?${params.toString()}`;
+  };
 
   return (
     <div className="inline-flex">
@@ -26,7 +32,6 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
       <div className="flex -space-x-px">
         {allPages.map((page, index) => {
           let position: 'first' | 'last' | 'single' | 'middle' | undefined;
-
           if (index === 0) position = 'first';
           if (index === allPages.length - 1) position = 'last';
           if (allPages.length === 1) position = 'single';
