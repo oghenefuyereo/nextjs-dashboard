@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import CardsSection from './cards-section';
@@ -9,10 +10,18 @@ import {
   LatestInvoicesSkeleton,
 } from '@/app/ui/skeletons';
 
+// Add metadata for this page
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'View key metrics and recent activity in your dashboard.',
+};
+
 export default function Page() {
   return (
     <main className="p-4 md:p-8">
-      <h1 className={`${lusitana.className} mb-6 text-2xl md:text-3xl font-semibold`}>
+      <h1
+        className={`${lusitana.className} mb-6 text-2xl md:text-3xl font-semibold`}
+      >
         Dashboard
       </h1>
 
