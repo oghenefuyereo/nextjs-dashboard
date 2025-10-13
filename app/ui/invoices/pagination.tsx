@@ -17,7 +17,7 @@ export default function Pagination({ totalPages, currentPage, query }: Paginatio
   const createPageURL = (page: number | string) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
-    if (query) params.set('query', query);
+    if (query) params.set('query', query); // preserve search query
     return `/dashboard/invoices?${params.toString()}`;
   };
 

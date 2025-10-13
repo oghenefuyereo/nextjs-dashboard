@@ -1,6 +1,7 @@
+// app/ui/invoices/table.tsx
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
-import InvoiceStatus from '@/app/ui/invoices/status';
+import { UpdateInvoice, DeleteInvoice } from './buttons';
+import InvoiceStatus from './status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
 
@@ -9,10 +10,7 @@ interface InvoicesTableProps {
   currentPage: number;
 }
 
-export default async function InvoicesTable({
-  query,
-  currentPage,
-}: InvoicesTableProps) {
+export async function Table({ query, currentPage }: InvoicesTableProps) {
   const invoices = await fetchFilteredInvoices(query, currentPage);
 
   if (!invoices || invoices.length === 0) {
@@ -26,10 +24,7 @@ export default async function InvoicesTable({
           {/* Mobile view */}
           <div className="md:hidden">
             {invoices.map((invoice) => (
-              <div
-                key={invoice.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
-              >
+              <div key={invoice.id} className="mb-2 w-full rounded-md bg-white p-4">
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
@@ -48,9 +43,7 @@ export default async function InvoicesTable({
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <p className="text-xl font-medium">
-                      {formatCurrency(invoice.amount)}
-                    </p>
+                    <p className="text-xl font-medium">{formatCurrency(invoice.amount)}</p>
                     <p>{formatDateToLocal(invoice.date)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
@@ -66,9 +59,7 @@ export default async function InvoicesTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
-                </th>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">Customer</th>
                 <th scope="col" className="px-3 py-5 font-medium">Email</th>
                 <th scope="col" className="px-3 py-5 font-medium">Amount</th>
                 <th scope="col" className="px-3 py-5 font-medium">Date</th>
@@ -97,12 +88,8 @@ export default async function InvoicesTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">{invoice.email}</td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(invoice.amount)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
-                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">{formatCurrency(invoice.amount)}</td>
+                  <td className="whitespace-nowrap px-3 py-3">{formatDateToLocal(invoice.date)}</td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <InvoiceStatus status={invoice.status} />
                   </td>

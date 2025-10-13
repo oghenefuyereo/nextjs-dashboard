@@ -1,6 +1,6 @@
 import Pagination from '@/app/ui/invoices/pagination';
 import Search from '@/app/ui/search';
-import Table from '@/app/ui/invoices/table';
+import { Table } from '@/app/ui/invoices/table'; // ✅ named import
 import { CreateInvoice } from '@/app/ui/invoices/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
@@ -11,10 +11,9 @@ interface PageProps {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  //  unwrap the searchParams promise
   const { query = '', page = '1' } = await searchParams;
   const currentPage = Number(page);
-  const totalPages = 5; 
+  const totalPages = 5;
 
   return (
     <div className="w-full">
