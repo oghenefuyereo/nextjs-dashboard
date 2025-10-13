@@ -1,37 +1,35 @@
-import { Card } from '@/app/ui/dashboard/cards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchRevenue, fetchLatestInvoices, fetchCardData } from '@/app/lib/data';
+import { Suspense } from 'react';
+import CardsSection from './cards-section';
+import RevenueSection from './revenue-section';
+import InvoicesSection from './invoices-section';
+import {
+  CardsSkeleton,
+  RevenueChartSkeleton,
+  LatestInvoicesSkeleton,
+} from '@/app/ui/skeletons';
 
-export default async function Page() {
-  // Fetch all data in parallel
-  const [revenue, latestInvoices, cardData] = await Promise.all([
-    fetchRevenue(),
-    fetchLatestInvoices(),
-    fetchCardData(),
-  ]);
-
-  const { numberOfInvoices, numberOfCustomers, totalPaidInvoices, totalPendingInvoices } = cardData;
-
+export default function Page() {
   return (
-    <main>
-      <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+    <main className="p-4 md:p-8">
+      <h1 className={`${lusitana.className} mb-6 text-2xl md:text-3xl font-semibold`}>
         Dashboard
       </h1>
 
-      {/* Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Card title="Collected" value={totalPaidInvoices} type="collected" />
-        <Card title="Pending" value={totalPendingInvoices} type="pending" />
-        <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-        <Card title="Total Customers" value={numberOfCustomers} type="customers" />
-      </div>
+      {/* Dashboard Cards */}
+      <Suspense fallback={<CardsSkeleton />}>
+        <CardsSection />
+      </Suspense>
 
-      {/* Revenue chart and latest invoices */}
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <RevenueChart revenue={revenue} />
-        <LatestInvoices latestInvoices={latestInvoices} />
+      {/* Revenue Chart and Latest Invoices */}
+      <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-8">
+        <Suspense fallback={<RevenueChartSkeleton />}>
+          <RevenueSection />
+        </Suspense>
+
+        <Suspense fallback={<LatestInvoicesSkeleton />}>
+          <InvoicesSection />
+        </Suspense>
       </div>
     </main>
   );

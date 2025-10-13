@@ -4,58 +4,62 @@ import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { LatestInvoice } from '@/app/lib/definitions';
 
-export default async function LatestInvoices({
-  latestInvoices,
-}: {
+interface LatestInvoicesProps {
   latestInvoices: LatestInvoice[];
-}) {
+}
+
+export default function LatestInvoices({ latestInvoices }: LatestInvoicesProps) {
+  if (!latestInvoices || latestInvoices.length === 0) {
+    return <p className="mt-4 text-gray-400">No invoices available.</p>;
+  }
+
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Latest Invoices
       </h2>
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-        <div className="bg-white px-6">
-          {latestInvoices.map((invoice, i) => {
-            return (
-              <div
-                key={invoice.id}
-                className={clsx(
-                  'flex flex-row items-center justify-between py-4',
-                  {
-                    'border-t': i !== 0,
-                  },
-                )}
-              >
-                <div className="flex items-center">
-                  <Image
-                    src={invoice.image_url}
-                    alt={`${invoice.name}'s profile picture`}
-                    className="mr-4 rounded-full"
-                    width={32}
-                    height={32}
-                  />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold md:text-base">
-                      {invoice.name}
-                    </p>
-                    <p className="hidden text-sm text-gray-500 sm:block">
-                      {invoice.email}
-                    </p>
-                  </div>
+
+      <div className="flex flex-col justify-between rounded-xl bg-gray-50 p-4 grow">
+        <div className="bg-white rounded-md">
+          {latestInvoices.map((invoice, i) => (
+            <div
+              key={invoice.id}
+              className={clsx(
+                'flex items-center justify-between py-4 px-6',
+                { 'border-t': i !== 0 }
+              )}
+            >
+              <div className="flex items-center min-w-0">
+                <Image
+                  src={invoice.image_url}
+                  alt={`${invoice.name}'s profile picture`}
+                  width={32}
+                  height={32}
+                  className="mr-4 rounded-full object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold md:text-base">
+                    {invoice.name}
+                  </p>
+                  <p className="hidden sm:block truncate text-sm text-gray-500">
+                    {invoice.email}
+                  </p>
                 </div>
-                <p
-                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
-                >
-                  {invoice.amount}
-                </p>
               </div>
-            );
-          })}
+
+              <p
+                className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+              >
+                {invoice.amount}
+              </p>
+            </div>
+          ))}
         </div>
-        <div className="flex items-center pb-2 pt-6">
-          <ArrowPathIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
+
+        {/* Footer */}
+        <div className="flex items-center mt-6 text-gray-500">
+          <ArrowPathIcon className="h-5 w-5" />
+          <span className="ml-2 text-sm">Updated just now</span>
         </div>
       </div>
     </div>
