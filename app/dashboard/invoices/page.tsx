@@ -11,9 +11,10 @@ interface PageProps {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { query = '', page = '1' } = await searchParams; // unwrap promise
+  // Unwrap the Promise
+  const { query = '', page = '1' } = await searchParams;
   const currentPage = parseInt(page, 10);
-  const totalPages = 5; // replace with your actual total pages calculation
+  const totalPages = 5; // Replace with dynamic value if available
 
   return (
     <div className="w-full">
@@ -26,6 +27,7 @@ export default async function Page({ searchParams }: PageProps) {
         <CreateInvoice />
       </div>
 
+      {/* Suspense for async Table */}
       <Suspense
         key={`${query}-${currentPage}`}
         fallback={<InvoicesTableSkeleton />}
