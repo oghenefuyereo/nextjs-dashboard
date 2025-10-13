@@ -36,7 +36,7 @@ export default async function Page({ searchParams }: PageProps) {
       </Suspense>
 
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages}  />
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
       </div>
     </div>
   );
